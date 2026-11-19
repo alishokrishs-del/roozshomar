@@ -1,0 +1,85 @@
+/* صفحه‌ی امروز — شیشه‌ای (جایگزین ویجت در آیفون) */
+.glass-page { --g-a: .30; --g-blur: 22px; --g-rgb: 18, 24, 38; --g-text: #F5F7FA; --g-sub: rgba(245,247,250,.72); --g-line: rgba(255,255,255,.22);
+  --g-hol: #FF8A80; --g-title: #9FD0FF; background: #0B1220; color: var(--g-text); min-height: 100vh; }
+.glass-page.light { background: #EEF2F8; --g-rgb: 255, 255, 255; --g-text: #1F2933; --g-sub: rgba(31,41,51,.66); --g-line: rgba(255,255,255,.6); --g-hol: #D32F2F; --g-title: #0D47A1; }
+
+/* پس‌زمینه: رنگ‌های تم یا تصویر دلخواه */
+.wall { position: fixed; inset: -40px; z-index: 0; background-size: cover; background-position: center; transform: translateZ(0); }
+.tp { position: relative; z-index: 1; max-width: 520px; margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 8px) calc(env(safe-area-inset-right) + 14px) calc(env(safe-area-inset-bottom) + 24px) calc(env(safe-area-inset-left) + 14px);
+  animation: tpIn .32s ease-out both; }
+@keyframes tpIn { from { opacity: 0; transform: translateY(10px) scale(.985); } to { opacity: 1; transform: none; } }
+
+.tbar { display: flex; align-items: center; justify-content: space-between; height: 48px; margin-bottom: 6px; }
+.tbar .ttl { font-size: 17px; font-weight: 700; text-shadow: 0 1px 6px rgba(0,0,0,.35); }
+.glass-page.light .tbar .ttl { text-shadow: none; }
+.tbtn { height: 36px; min-width: 36px; padding: 0 14px; border-radius: 18px; display: flex; align-items: center; justify-content: center; text-decoration: none;
+  color: var(--g-text); font-size: 14px; font-weight: 700; background: rgba(var(--g-rgb), calc(var(--g-a) + .1));
+  -webkit-backdrop-filter: blur(var(--g-blur)) saturate(170%); backdrop-filter: blur(var(--g-blur)) saturate(170%); border: 1px solid var(--g-line); }
+.tbtn.icon { padding: 0; width: 36px; font-size: 19px; }
+
+/* کارت شیشه‌ای */
+.gc { position: relative; border-radius: 26px; padding: 14px 16px; margin-bottom: 12px; background: rgba(var(--g-rgb), var(--g-a));
+  -webkit-backdrop-filter: blur(var(--g-blur)) saturate(170%); backdrop-filter: blur(var(--g-blur)) saturate(170%);
+  border: 1px solid var(--g-line); box-shadow: 0 8px 28px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.18);
+  text-shadow: 0 1px 4px rgba(0,0,0,.28); user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transition: transform .18s, box-shadow .18s; }
+.glass-page.light .gc { text-shadow: none; box-shadow: 0 8px 28px rgba(0,0,0,.10), inset 0 1px 0 rgba(255,255,255,.7); }
+.gc h4 { margin: 0 0 6px; font-size: 15px; color: var(--g-title); }
+.gc.lift { z-index: 5; transform: scale(1.03); box-shadow: 0 18px 44px rgba(0,0,0,.38); transition: box-shadow .18s; }
+.gc.lift.moving { transition: none; }
+.gc.press { transform: scale(.985); }
+
+/* تاریخ امروز (کوچک و جمع‌وجور) */
+.hero { display: flex; align-items: center; gap: 14px; padding: 12px 18px; }
+.hero .big { font-size: 56px; font-weight: 700; line-height: 1; min-width: 78px; text-align: center; }
+.hero .sep { width: 1.5px; align-self: stretch; margin: 6px 0; background: var(--g-line); }
+.hero .info { flex: 1; min-width: 0; }
+.hero .wdn { font-size: 21px; font-weight: 700; color: var(--g-title); }
+.hero .wdn.red { color: var(--g-hol); }
+.hero .mon { font-size: 17px; font-weight: 700; margin-top: 2px; }
+.hero .chip2 { display: inline-block; margin-top: 6px; padding: 2px 12px 3px; border-radius: 14px; font-size: 12px; font-weight: 700;
+  background: color-mix(in srgb, var(--accent) 88%, transparent); color: var(--on-accent); text-shadow: none; cursor: pointer; }
+
+.dates .ln { font-size: 15.5px; line-height: 1.75; }
+.dates .ln b { font-weight: 700; }
+.dates .yr { font-size: 13.5px; color: var(--g-sub); margin-top: 8px; }
+
+/* تقویم ماه */
+.calc { padding: 10px 8px 8px; }
+.calc .ch { display: flex; align-items: center; height: 44px; }
+.calc .ch button { width: 48px; height: 44px; font-size: 28px; font-weight: 700; color: var(--g-title); direction: ltr; }
+.calc .ch .mt { flex: 1; width: auto; font-size: 18px; font-weight: 700; color: var(--g-text); direction: rtl; }
+.calc .wk, .calc .gr { display: grid; grid-template-columns: repeat(7, 1fr); }
+.calc .wk div { text-align: center; font-size: 13px; font-weight: 700; color: var(--g-sub); height: 28px; line-height: 28px; }
+.calc .wk div.f { color: var(--g-hol); }
+.calc .c { height: 46px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 16px; color: var(--g-text); }
+.calc .c span { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.calc .c i { width: 4px; height: 4px; border-radius: 50%; margin-top: 2px; background: transparent; }
+.calc .c.ev i { background: var(--g-title); opacity: .6; }
+.calc .c.red { color: var(--g-hol); }
+.calc .c.red.ev i { background: var(--g-hol); }
+.calc .c.now span { box-shadow: inset 0 0 0 2px var(--g-title); font-weight: 700; }
+.calc .c.sel span { background: var(--accent); color: var(--on-accent); font-weight: 700; text-shadow: none; }
+
+.events .e { font-size: 15.5px; line-height: 1.7; margin-top: 4px; }
+.events .e.h { color: var(--g-hol); font-weight: 700; }
+.events .m { font-size: 14.5px; color: var(--g-sub); }
+
+.btns { display: flex; gap: 10px; padding: 10px; }
+.btns button, .btns a { flex: 1; height: 44px; border-radius: 22px; display: flex; align-items: center; justify-content: center; text-decoration: none;
+  font-size: 15px; font-weight: 700; color: var(--g-text); background: rgba(255,255,255,.12); border: 1px solid var(--g-line); }
+.glass-page.light .btns button, .glass-page.light .btns a { background: rgba(255,255,255,.45); }
+
+.tcredit { text-align: center; font-size: 12px; color: var(--g-sub); margin-top: 6px; text-shadow: 0 1px 4px rgba(0,0,0,.3); }
+.glass-page.light .tcredit { text-shadow: none; }
+
+/* جای خالی هنگام جابه‌جایی */
+.ph { border-radius: 26px; margin-bottom: 12px; border: 2px dashed var(--g-line); }
+
+/* پنجره‌ها روی صفحه‌ی شیشه‌ای */
+.glass-page .sheet { background: color-mix(in srgb, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(30px) saturate(170%); backdrop-filter: blur(30px) saturate(170%); }
+.rng { width: 100%; accent-color: var(--accent); height: 30px; }
+.seg { display: flex; gap: 8px; margin-top: 6px; }
+.seg button { flex: 1; height: 40px; border-radius: 20px; border: 1.5px solid var(--muted); font-weight: 700; font-size: 14px; }
+.seg button.sel { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.slab { font-weight: 700; margin-top: 16px; font-size: 15px; }

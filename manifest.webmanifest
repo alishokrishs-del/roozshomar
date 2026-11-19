@@ -1,0 +1,22 @@
+{
+  "id": "./?app=roozshomar",
+  "name": "روزشمار شمسی",
+  "short_name": "روزشمار",
+  "description": "محاسبه‌ی تاریخ شمسی بر اساس تعداد روز، روزهای کاری، تقویم، مناسبت‌ها و محاسبه‌ی سن — طراحی و توسعه : علی شکری",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F4F6FA",
+  "theme_color": "#F4F6FA",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "امروز", "short_name": "امروز", "url": "./today.html", "icons": [{ "src": "today-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ]
+}

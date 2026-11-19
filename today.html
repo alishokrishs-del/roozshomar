@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>امروز — روزشمار شمسی</title>
+<meta name="description" content="تاریخ امروز شمسی، میلادی و قمری، تقویم ماه و مناسبت‌ها — طراحی و توسعه : علی شکری">
+<meta name="theme-color" content="#0E1626">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="امروز">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="today.webmanifest">
+<link rel="apple-touch-icon" href="today-touch-icon.png">
+<link rel="icon" href="today-192.png">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="today.css">
+</head>
+<body class="glass-page">
+<div class="wall" id="wall"></div>
+<main class="tp">
+  <header class="tbar">
+    <a class="tbtn" href="index.html" id="openApp" aria-label="باز کردن محاسبه‌گر">‹ روزشمار</a>
+    <div class="ttl">امروز</div>
+    <button class="tbtn icon" id="setBtn" aria-label="تنظیمات">⚙</button>
+  </header>
+  <div id="sections"></div>
+  <div class="tcredit" id="tcredit"></div>
+</main>
+
+<div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
+
+<script src="core.js"></script>
+<script src="ui.js"></script>
+<script src="today.js"></script>
+</body>
+</html>

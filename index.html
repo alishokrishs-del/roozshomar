@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>روزشمار شمسی</title>
+<meta name="description" content="محاسبه‌ی تاریخ شمسی بر اساس تعداد روز، روزهای کاری، تقویم، مناسبت‌ها و محاسبه‌ی سن — طراحی و توسعه : علی شکری">
+<meta name="theme-color" content="#F4F6FA">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="روزشمار">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<main class="app">
+  <h1>محاسبه تاریخ بر اساس تعداد روز</h1>
+  <div class="today" id="today"></div>
+
+  <div class="label">تعداد روز :</div>
+  <div class="inrow">
+    <button class="sq" id="plus" aria-label="یک روز بعد">+</button>
+    <input id="days" inputmode="numeric" pattern="-?[0-9]*" autocomplete="off" placeholder="مثلاً 10" aria-label="تعداد روز">
+    <button class="sq" id="minus" aria-label="یک روز قبل">−</button>
+  </div>
+
+  <div class="units"><span class="ul">واحد :</span>
+    <button class="chip" data-u="0">روز</button><button class="chip" data-u="1">هفته</button><button class="chip" data-u="2">ماه</button></div>
+  <div class="check" id="chkWork"><span class="bx"></span><span>فقط روزهای کاری (بدون جمعه و تعطیلات رسمی)</span></div>
+  <div class="check sub" id="chkThu"><span class="bx"></span><span>پنج‌شنبه هم تعطیل حساب شود</span></div>
+
+  <div class="label">تاریخ شمسی :</div>
+  <div class="resrow">
+    <div class="result" id="result" role="button" aria-label="کپی تاریخ"></div>
+    <button class="calbtn" id="calBtn" aria-label="تقویم"></button>
+  </div>
+  <div class="info">
+    <div class="wd" id="wd"></div>
+    <div class="rel" id="rel"></div>
+    <div class="gl" id="greg"></div>
+    <div class="gl" id="hijri"></div>
+    <div class="cp" id="copied"></div>
+  </div>
+
+  <div class="acts">
+    <button class="pill" id="shareBtn">اشتراک‌گذاری</button>
+    <button class="pill" id="remBtn">یادآور</button>
+    <button class="pill" id="histBtn">سابقه</button>
+  </div>
+  <div class="acts" style="margin-top:4px">
+    <button class="pill" id="diffBtn">فاصله‌ی دو تاریخ</button>
+    <button class="pill" id="ageBtn">محاسبه‌ی سن</button>
+  </div>
+
+  <section class="events" id="events" hidden><h3>مناسبت‌ها :</h3><div id="evList"></div></section>
+
+  <div class="links">
+    <a class="pill solid" href="today.html" style="display:flex;align-items:center;justify-content:center;text-decoration:none">📅 صفحه‌ی امروز (ویجت)</a>
+    <button class="pill" id="themeBtn">🎨 تغییر تم و رنگ‌ها</button>
+    <button class="pill" id="helpBtn">❔ راهنما</button>
+  </div>
+  <div class="ver" id="ver"></div>
+  <div class="credit" id="credit"></div>
+</main>
+
+<div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
+
+<script src="core.js"></script>
+<script src="ui.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
