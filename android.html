@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دانلود روزشمار شمسی برای اندروید</title>
+<style>
+  @font-face { font-family: Vazirmatn; src: url("Vazirmatn-FD-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: Vazirmatn; src: url("Vazirmatn-FD-Bold.ttf"); font-weight: 700; }
+  :root { --accent: #1565C0; --bg: #F4F6FA; --text: #37474F; --muted: #78909C; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Vazirmatn, Tahoma, sans-serif; background: var(--bg); color: var(--text); line-height: 1.9; }
+  main { max-width: 520px; margin: 0 auto; padding: 28px 20px 40px; }
+  .card { background: #fff; border-radius: 22px; padding: 26px 22px; box-shadow: 0 6px 24px rgba(21,101,192,.10); text-align: center; }
+  img { width: 88px; height: 88px; border-radius: 22px; }
+  h1 { font-size: 1.45rem; margin: 12px 0 2px; }
+  .ver { color: var(--muted); margin: 0 0 18px; }
+  .btn { display: block; background: var(--accent); color: #fff; text-decoration: none; font-weight: 700; font-size: 1.1rem;
+         padding: 14px 18px; border-radius: 999px; }
+  .notes { text-align: right; white-space: pre-line; color: var(--muted); font-size: .95rem; margin: 16px 0 0; }
+  h2 { font-size: 1.05rem; margin: 26px 0 6px; }
+  ol { padding-right: 20px; margin: 0; }
+  li { margin: 4px 0; }
+  .foot { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <img src="icon-192.png" alt="">
+    <h1>روزشمار شمسی</h1>
+    <p class="ver" id="ver">نسخه‌ی اندروید</p>
+    <a class="btn" id="dl" href="RoozShomar.apk" download>دانلود برای اندروید</a>
+    <p class="notes" id="notes"></p>
+  </div>
+
+  <h2>نصب</h2>
+  <ol>
+    <li>دکمه‌ی بالا را بزنید و فایل را دانلود کنید.</li>
+    <li>فایل دانلودشده را باز کنید. اگر اندروید پرسید، اجازه‌ی نصب از این منبع را بدهید.</li>
+    <li>«نصب» را بزنید. اگر نسخه‌ی قبلی را دارید، روی همان نصب می‌شود و تنظیمات و ویجت‌ها می‌مانند.</li>
+  </ol>
+  <h2>به‌روزرسانی</h2>
+  <p>از نسخه‌ی ۳.۱ به بعد، خود برنامه نسخه‌های جدید را پیدا می‌کند و پیام می‌دهد؛ دیگر لازم نیست به این صفحه برگردید.</p>
+
+  <p class="foot">طراحی و توسعه : علی شکری</p>
+</main>
+<script>
+  // نسخه و تغییرات از همان فایلی خوانده می‌شود که برنامه برای به‌روزرسانی می‌خواند
+  fetch("android-latest.json?t=" + Date.now()).then(function (r) { return r.json(); }).then(function (j) {
+    var fa = function (s) { return String(s).replace(/[0-9]/g, function (d) { return "۰۱۲۳۴۵۶۷۸۹"[d]; }); };
+    document.getElementById("ver").textContent = "نسخه‌ی " + fa(j.versionName) + " برای اندروید";
+    document.getElementById("notes").textContent = j.notes || "";
+    document.getElementById("dl").href = j.apk + "?v=" + j.versionCode;
+  }).catch(function () {});
+</script>
+</body>
+</html>
