@@ -1,8 +1,8 @@
 {
-  "versionCode": 38,
-  "versionName": "3.3",
+  "versionCode": 39,
+  "versionName": "3.4",
   "apk": "RoozShomar.apk",
   "size": 839260,
-  "sha256": "21e4d92f5e1d5c423f63b3f26ddc7f48c4205b39e8da60f62a07794f2bb267f0",
+  "sha256": "139b7223982cfbeba7e1d9ee0c89c1133e2897ac1ba7d038180a87fb55e794f1",
   "notes": "• ارسال آمار ناشناس نصب برای توسعه‌دهنده (بدون نام، شماره یا موقعیت؛ قابل خاموش کردن در «درباره‌ی برنامه»)\n• بهبود به‌روزرسانی و پایداری"
 }
