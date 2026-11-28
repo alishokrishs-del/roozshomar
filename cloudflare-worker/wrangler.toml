@@ -1,0 +1,19 @@
+# روزشمار شمسی — سرور آمار و آینه‌ی به‌روزرسانی روی Cloudflare
+# نام Worker در داشبورد Cloudflare باید دقیقاً «roozshomar» باشد.
+# رمز مدیریت اینجا نیست: آن را در داشبورد به‌صورت Secret با نام ADMIN_PASSWORD بگذارید.
+name = "roozshomar"
+main = "worker.js"
+compatibility_date = "2025-10-01"
+workers_dev = true
+
+routes = [
+  { pattern = "rs.shokricloud.shop", custom_domain = true }
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "roozshomar-stats"
+database_id = "5d7f1f9c-bb46-4431-aed4-314cb05a5346"
+
+[observability]
+enabled = true
