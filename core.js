@@ -2,7 +2,7 @@
  * طراحی و توسعه : علی شکری — © ۱۴۰۵ کلیه‌ی حقوق محفوظ است */
 "use strict";
 
-const APP_VERSION = "2.9";
+const APP_VERSION = "3.0";
 
 // ---------- تقویم شمسی (همان الگوریتم نسخه‌ی اندروید) ----------
 const BREAKS = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178];
@@ -95,7 +95,12 @@ const fa = s => String(s).replace(/[0-9]/g, d => FA[+d]);
 const en = s => String(s).replace(/[۰-۹]/g, d => FA.indexOf(d)).replace(/[٠-٩]/g, d => AR.indexOf(d));
 const pad2 = n => (n < 10 ? "0" : "") + n;
 const fmtJ = j => fa(j[0] + "/" + pad2(j[1]) + "/" + pad2(j[2]));
-const gregText = jdn => { const g = d2g(jdn); return fa(g[2]) + " " + G_MONTHS[g[1] - 1] + " " + fa(g[0]); };
+const EN_WEEK = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const EN_MONTH = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+/** معادل میلادی به انگلیسی با روز هفته: «Sunday, 13 December 2026» */
+const gregText = jdn => { const g = d2g(jdn); return EN_WEEK[J.weekColumn(jdn)] + ", " + g[2] + " " + EN_MONTH[g[1] - 1] + " " + g[0]; };
+/** کوتاه: «Sun, 13 Dec 2026» */
+const gregShort = jdn => { const g = d2g(jdn); return EN_WEEK[J.weekColumn(jdn)].slice(0, 3) + ", " + g[2] + " " + EN_MONTH[g[1] - 1].slice(0, 3) + " " + g[0]; };
 const gregNum = jdn => { const g = d2g(jdn); return fa(g[0] + "/" + pad2(g[1]) + "/" + pad2(g[2])); };
 const hijriText = jdn => { const h = hijriFromJdn(jdn); return fa(h[2]) + " " + H_MONTHS[h[1] - 1] + " " + fa(h[0]) + (h[3] ? "" : " (محاسباتی)"); };
 

@@ -17,8 +17,10 @@
 </head>
 <body>
 <main class="app">
+ <section class="tab" id="tab0">
   <h1>محاسبه تاریخ بر اساس تعداد روز</h1>
   <div class="today" id="today"></div>
+  <div class="today en" id="todayEn" dir="ltr"></div>
 
   <div class="labrow"><div class="label">تعداد روز :</div>
     <button class="basex" id="baseClear" aria-label="شروع شمارش از امروز" hidden>✕</button>
@@ -36,7 +38,6 @@
   <div class="check" id="chkWork"><span class="bx"></span><span>فقط روزهای کاری (بدون جمعه و تعطیلات رسمی)</span></div>
   <div class="check sub" id="chkThu"><span class="bx"></span><span>پنج‌شنبه هم تعطیل حساب شود</span></div>
 
-  <div class="label">تاریخ شمسی :</div>
   <div class="resrow">
     <div class="result" id="result" role="button" aria-label="کپی تاریخ"></div>
     <button class="calbtn" id="calBtn" aria-label="تقویم"></button>
@@ -46,6 +47,7 @@
     <div class="rel" id="rel"></div>
     <div class="gl" id="greg"></div>
     <div class="gl" id="hijri"></div>
+    <button class="peek" id="evPeek"></button>
     <div class="cp" id="copied"></div>
   </div>
 
@@ -54,21 +56,37 @@
     <button class="pill" id="remBtn">یادآور</button>
     <button class="pill" id="histBtn">سابقه</button>
   </div>
-  <div class="acts" style="margin-top:4px">
-    <button class="pill" id="diffBtn">فاصله‌ی دو تاریخ</button>
-    <button class="pill" id="ageBtn">محاسبه‌ی سن</button>
-  </div>
+ </section>
 
-  <section class="events" id="events" hidden><h3>مناسبت‌ها :</h3><div id="evList"></div></section>
+ <section class="tab" id="tab1" hidden>
+  <h2 class="ttl" id="evTitle">مناسبت‌های روز حاصل</h2>
+  <section class="events" id="events" hidden><div id="evList"></div></section>
+  <div class="msg muted" id="evNone">اول در زبانه‌ی «محاسبه» تعداد روز را بنویسید .</div>
+ </section>
 
-  <div class="links">
-    <a class="pill solid" href="today.html" style="display:flex;align-items:center;justify-content:center;text-decoration:none">📅 صفحه‌ی امروز (ویجت)</a>
-    <button class="pill" id="themeBtn">🎨 تغییر تم و رنگ‌ها</button>
-    <button class="pill" id="helpBtn">❔ راهنما</button>
-  </div>
+ <section class="tab" id="tab2" hidden>
+  <h2 class="ttl">ابزارها</h2>
+  <button class="tile" id="diffBtn"><b>📏 فاصله‌ی دو تاریخ</b><span>چند روز، هفته، ماه و روز کاری بین دو تاریخ</span></button>
+  <button class="tile" id="ageBtn"><b>🎂 محاسبه‌ی سن</b><span>سن دقیق، روز تولد و فاصله تا تولد بعدی</span></button>
+  <button class="tile" id="histTile"><b>🕘 سابقه‌ی محاسبه‌ها</b><span>۳۰ محاسبه‌ی آخر؛ با زدن روی هر مورد دوباره حساب می‌شود</span></button>
+  <a class="tile" href="today.html"><b>📆 صفحه‌ی امروز (ویجت)</b><span>تاریخ کامل امروز، تقویم ماه و مناسبت‌های هر روز</span></a>
+ </section>
+
+ <section class="tab" id="tab3" hidden>
+  <h2 class="ttl">تنظیمات و راهنما</h2>
+  <button class="tile" id="themeBtn"><b>🎨 تغییر تم و رنگ‌ها</b><span>رنگ اصلی و رنگ زمینه، روشن یا تیره</span></button>
+  <button class="tile" id="helpBtn"><b>❔ راهنما</b><span>همه‌ی امکانات برنامه، کوتاه و ساده</span></button>
   <div class="ver" id="ver"></div>
   <div class="credit" id="credit"></div>
+ </section>
 </main>
+
+<nav class="tabbar" id="tabbar">
+  <button data-t="0"><i>🧮</i><span>محاسبه</span></button>
+  <button data-t="1"><i>📅</i><span id="tabEvName">مناسبت‌ها</span></button>
+  <button data-t="2"><i>🧰</i><span>ابزارها</span></button>
+  <button data-t="3"><i>⚙️</i><span>بیشتر</span></button>
+</nav>
 
 <div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
 

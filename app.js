@@ -33,6 +33,7 @@ function update() {
   ["wd", "rel", "greg", "hijri", "copied"].forEach(i => el(i).textContent = "");
   el("wd").classList.remove("red");
   el("events").hidden = true;
+  setPeek(null);
   el("result").classList.remove("err");
   const v = readN();
   if (v.empty) { el("result").textContent = ""; refreshActions(); return; }
@@ -55,7 +56,7 @@ function update() {
   el("wd").classList.toggle("red", col === 6);
   S.rel = relativeLine(n, r, working);
   el("rel").textContent = S.rel;
-  el("greg").textContent = "میلادی : " + gregText(r.jdn);
+  el("greg").replaceChildren("میلادی : ", h("span", { class: "en", dir: "ltr" }, gregText(r.jdn)));
   el("hijri").textContent = "قمری : " + hijriText(r.jdn);
   el("copied").textContent = "برای کپی، روی تاریخ بزنید";
   refreshActions();
@@ -113,6 +114,26 @@ function openBase() {
   pickDate(S.base || null, j => setBase(j), "شمارش از چه روزی شروع شود؟");
 }
 
+// ---------- زبانه‌ها ----------
+function selectTab(t) {
+  S.tab = t;
+  for (let i = 0; i < 4; i++) el("tab" + i).hidden = i !== t;
+  $$("#tabbar button").forEach(b => b.classList.toggle("on", +b.dataset.t === t));
+  if (t !== 0) el("days").blur();
+  window.scrollTo(0, 0);
+}
+/** خلاصه‌ی مناسبت روز حاصل روی صفحه‌ی محاسبه و عدد کنار زبانه */
+function setPeek(evs, msg) {
+  const p = el("evPeek");
+  if (msg) p.textContent = msg;
+  else if (!evs) p.textContent = "";
+  else if (!evs.length) p.textContent = "مناسبتی برای این روز ثبت نشده";
+  else p.textContent = (evs.length > 1 ? "📅 " + fa(evs.length) + " مناسبت :  " : "• ") + fa(evs[0].text) + (evs[0].holiday ? " (تعطیل)" : "");
+  el("tabEvName").textContent = "مناسبت‌ها" + (evs && evs.length ? " " + fa(evs.length) : "");
+  el("evNone").hidden = S.cur !== null;
+  if (S.cur !== null) { const j = d2j(S.cur); el("evTitle").textContent = "مناسبت‌های " + fa(j[2]) + " " + MONTHS[j[1] - 1] + " " + fa(j[0]); }
+}
+
 function showEvents(seq, j) {
   const box = el("events"), list = el("evList");
   const paint = data => {
@@ -120,16 +141,18 @@ function showEvents(seq, j) {
     const r = Events.day(data, j[1], j[2]);
     if (r.holiday) el("wd").classList.add("red");
     list.innerHTML = "";
-    if (!r.events.length) { box.hidden = true; return; }
+    setPeek(r.events);
+    if (!r.events.length) { box.hidden = false; list.append(h("div", { class: "msg" }, "مناسبتی برای این روز ثبت نشده .")); return; }
     r.events.forEach(e => list.append(h("div", { class: "ev" + (e.holiday ? " h" : "") }, "• " + fa(e.text) + (e.holiday ? " (تعطیل)" : ""))));
     box.hidden = false;
   };
   const data = Events.peek(j[0]);
   if (data) return paint(data);
-  list.innerHTML = ""; list.append(h("div", { class: "msg" }, "در حال دریافت مناسبت‌های سال…")); box.hidden = false;
+  list.innerHTML = ""; list.append(h("div", { class: "msg" }, "در حال دریافت مناسبت‌های سال…")); box.hidden = false; setPeek(null, "در حال دریافت مناسبت‌ها…");
   Events.load(j[0]).then(paint).catch(() => {
     if (seq !== S.seq) return;
     list.innerHTML = ""; list.append(h("div", { class: "msg" }, "مناسبت‌های این سال در دسترس نیست؛ برای دریافت یک بار به اینترنت وصل شوید ."));
+    setPeek(null, "مناسبت‌ها در دسترس نیست (بدون اینترنت)");
   });
 }
 
@@ -257,9 +280,9 @@ function openDiff() {
   Sheet.push(function render(s) {
     s.append(h("h2", {}, "فاصله‌ی دو تاریخ"));
     s.append(h("div", { class: "muted" }, "از تاریخ :"));
-    s.append(h("button", { class: "datebtn", onclick: () => pickDate(from, j => { from = j; store.set("diffFrom", j); }) }, dateText(from)));
+    s.append(h("button", { class: "datebtn", onclick: () => pickDate(from, j => { from = j; store.set("diffFrom", j); }) }, dateText(from), h("small", { class: "en" }, gregShort(from))));
     s.append(h("div", { class: "muted", style: "margin-top:10px" }, "تا تاریخ :"));
-    s.append(h("button", { class: "datebtn", onclick: () => pickDate(to, j => { to = j; store.set("diffTo", j); }) }, dateText(to)));
+    s.append(h("button", { class: "datebtn", onclick: () => pickDate(to, j => { to = j; store.set("diffTo", j); }) }, dateText(to), h("small", { class: "en" }, gregShort(to))));
     const chk = h("div", { class: "check" + (th ? " on" : ""), style: "margin-top:12px", onclick: () => { th = !th; store.set("diffTh", th); Sheet.replace(render); } },
       h("span", { class: "bx" }, th ? "✓" : ""), h("span", {}, "پنج‌شنبه هم تعطیل حساب شود (برای روزهای کاری)"));
     s.append(chk);
@@ -288,7 +311,7 @@ function openDiff() {
         out.push("", "روز شروع حساب نمی‌شود و روز پایان حساب می‌شود .");
       }
       box.textContent = out.join("\n");
-      txt = "از " + dateText(from) + "\nتا " + dateText(to) + "\n" + out.join("\n");
+      txt = "از " + dateText(from) + " (" + gregShort(from) + ")\nتا " + dateText(to) + " (" + gregShort(to) + ")\n" + out.join("\n");
     };
     paint();
     const p = loadYears(from, to); if (p) p.then(() => { if (box.isConnected) paint(); });
@@ -326,7 +349,12 @@ function openAge() {
       const nb = Engine.nextBirthday(b[1], b[2], t), left = nb - t;
       if (left === 0) out.push("🎉 امروز تولد است ؛ تولدت مبارک !");
       else { out.push("تولد بعدی : " + fa(left) + " روز دیگر — " + fmtJ(d2j(nb)) + " (" + WD[J.weekColumn(nb)] + ")"); out.push("سن در تولد بعدی : " + fa(a[0] + 1) + " سال"); }
-      box.textContent = out.join("\n");
+      // سطر میلادی با فونت سیستم (فونت برنامه رقم لاتین را فارسی نشان می‌دهد)
+      const eng = gregText(bj);
+      box.replaceChildren(...out.flatMap((ln, i) => {
+        const k = ln.indexOf(eng), parts = k < 0 ? [ln] : [ln.slice(0, k), h("span", { class: "en", dir: "ltr" }, eng), ln.slice(k + eng.length)];
+        return i ? ["\n", ...parts] : parts;
+      }));
       txt = "تاریخ تولد : " + fmtJ(b) + "\n" + out.join("\n");
     };
     inp.addEventListener("input", paint);
@@ -343,6 +371,7 @@ function openAge() {
 function paintToday() {
   S.today = J.todayJdn();
   el("today").textContent = "امروز : " + WD[J.weekColumn(S.today)] + " " + fmtJ(d2j(S.today));
+  el("todayEn").textContent = gregText(S.today);
 }
 document.addEventListener("DOMContentLoaded", () => {
   const c = applyThemeVars();
@@ -385,6 +414,10 @@ document.addEventListener("DOMContentLoaded", () => {
   el("shareBtn").addEventListener("click", share);
   el("remBtn").addEventListener("click", reminder);
   el("histBtn").addEventListener("click", openHistory);
+  el("histTile").addEventListener("click", openHistory);
+  el("evPeek").addEventListener("click", () => selectTab(1));
+  $$("#tabbar button").forEach(b => b.addEventListener("click", () => selectTab(+b.dataset.t)));
+  selectTab(0);
   el("diffBtn").addEventListener("click", openDiff);
   el("ageBtn").addEventListener("click", openAge);
   el("themeBtn").addEventListener("click", () => openTheme(() => { el("calBtn").innerHTML = CAL_SVG(); el("baseCal").innerHTML = CAL_SVG(); }));

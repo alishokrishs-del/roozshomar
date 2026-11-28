@@ -73,7 +73,7 @@ function renderDay() {
   const dates = T.cards.dates; dates.innerHTML = "";
   dates.append(h("h4", {}, "تاریخ‌ها"),
     h("div", { class: "ln" }, h("b", {}, "شمسی : "), fa(j[2]) + " " + MONTHS[j[1] - 1] + " " + fa(j[0]) + "  —  " + fmtJ(j)),
-    h("div", { class: "ln" }, h("b", {}, "میلادی : "), fa(g[2]) + " " + G_MONTHS[g[1] - 1] + " " + fa(g[0]) + "  —  " + gregNum(T.sel)),
+    h("div", { class: "ln" }, h("b", {}, "میلادی : "), h("span", { class: "en", dir: "ltr" }, gregText(T.sel) + "  —  " + g[0] + "/" + pad2(g[1]) + "/" + pad2(g[2]))),
     h("div", { class: "ln" }, h("b", {}, "قمری : "), fa(hj[2]) + " " + H_MONTHS[hj[1] - 1] + " " + fa(hj[0]) + (hj[3] ? "" : " (محاسباتی)")),
     h("div", { class: "yr" }, "فصل " + SEASONS[Math.floor((j[1] - 1) / 3)] + "  •  روز " + fa(T.sel - y1 + 1) + " از " + fa(y2 - y1) + "  •  " + fa(y2 - T.sel) + " روز تا نوروز"));
 
@@ -109,7 +109,7 @@ function goToday() { T.today = J.todayJdn(); T.sel = T.today; [T.vy, T.vm] = d2j
 
 async function share() {
   const j = d2j(T.sel), col = J.weekColumn(T.sel), lines = [WD[col] + " " + fa(j[2]) + " " + MONTHS[j[1] - 1] + " " + fa(j[0]),
-    "شمسی : " + fmtJ(j), "میلادی : " + gregText(T.sel) + "  —  " + gregNum(T.sel), "قمری : " + hijriText(T.sel)];
+    "شمسی : " + fmtJ(j), "میلادی : " + gregText(T.sel), "قمری : " + hijriText(T.sel)];
   const data = Events.peek(j[0]);
   if (data) { const r = Events.day(data, j[1], j[2]); if (r.events.length) { lines.push("مناسبت‌ها :"); r.events.forEach(e => lines.push("• " + fa(e.text.trim()) + (e.holiday ? " (تعطیل)" : ""))); } }
   const text = lines.join("\n");

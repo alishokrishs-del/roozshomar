@@ -84,3 +84,6 @@
 .seg button { flex: 1; height: 40px; border-radius: 20px; border: 1.5px solid var(--muted); font-weight: 700; font-size: 14px; }
 .seg button.sel { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .slab { font-weight: 700; margin-top: 16px; font-size: 15px; }
+
+/* متن انگلیسی با فونت سیستم؛ فونت برنامه (Vazirmatn FD) رقم لاتین را هم فارسی نشان می‌دهد */
+.en { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
