@@ -89,7 +89,8 @@ h1 { margin: 0; text-align: center; font-size: 22px; font-weight: 700; color: va
 .calhead .tt button { font-size: 18px; font-weight: 700; padding: 4px 12px; border-radius: 18px; }
 .calhead .tt button.act { background: color-mix(in srgb, var(--bg) 85%, var(--accent)); color: var(--accent-text); }
 .g7 { display: grid; grid-template-columns: repeat(7, 1fr); }
-.g7 .hd { text-align: center; font-size: 13px; font-weight: 700; color: var(--muted); height: 30px; line-height: 30px; }
+.g7 .hd { text-align: center; font-size: 13px; font-weight: 700; color: var(--muted); height: 38px; line-height: 1.25; padding-top: 2px; }
+.g7 .hd small { display: block; font-size: 10px; font-weight: 400; opacity: .85; }
 .g7 .hd.f { color: var(--holiday); }
 .g7 .d { height: 44px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
 .g7 .d span { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }

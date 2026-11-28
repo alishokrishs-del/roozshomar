@@ -1,5 +1,5 @@
 // روزشمار شمسی — کارکرد آفلاین نسخه‌ی نصب‌شده (طراحی و توسعه : علی شکری)
-const CACHE = "roozshomar-web-2.8";
+const CACHE = "roozshomar-web-2.9";
 const YEARS = [];
 for (let y = 1400; y <= 1411; y++) YEARS.push("events-" + y + ".json");
 const SHELL = ["./", "index.html", "today.html", "manifest.webmanifest", "today.webmanifest",

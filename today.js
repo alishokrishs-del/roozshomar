@@ -43,7 +43,7 @@ function buildSections() {
     h("button", { "aria-label": "ماه قبل", onclick: () => shiftMonth(-1) }, "›"),
     h("button", { class: "mt", id: "mt", onclick: goToday }),
     h("button", { "aria-label": "ماه بعد", onclick: () => shiftMonth(1) }, "‹")));
-  const wk = h("div", { class: "wk" }); HEADS.forEach((x, i) => wk.append(h("div", { class: i === 6 ? "f" : "" }, x))); cal.append(wk);
+  const wk = h("div", { class: "wk" }); HEADS.forEach((x, i) => wk.append(h("div", { class: i === 6 ? "f" : "" }, x, h("small", {}, HEADS_EN[i])))); cal.append(wk);
   const gr = h("div", { class: "gr", id: "grid" });
   for (let i = 0; i < 42; i++) gr.append(h("button", { class: "c", "data-i": i, onclick: () => pickCell(i) }, h("span"), h("i")));
   cal.append(gr);
