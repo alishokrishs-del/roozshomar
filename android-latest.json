@@ -1,9 +1,9 @@
 {
-  "versionCode": 52,
-  "versionName": "4.6",
+  "versionCode": 53,
+  "versionName": "4.7",
   "apk": "RoozShomar.apk",
   "size": 851548,
-  "sha256": "fc012eb05944f5efd3a365d67fa44a69d24a6a0a0c0d70982471ed20cbbc8083",
-  "notes": "• به‌روزرسانی و آمار از دامنه‌ی اختصاصی برنامه روی Cloudflare (rs.shokricloud.shop)؛ اگر در دسترس نبود، خودکار از گیت‌هاب\n• دانلود نسخه‌ی جدید پایدارتر شد",
+  "sha256": "d5ce272dc7755864617002cce5169d3a942bc776e80e0174e39737d0137c46d1",
+  "notes": "• رفع بسته شدن برنامه هنگام ورود به پنل مدیریت\n• به‌روزرسانی و آمار از دامنه‌ی اختصاصی برنامه روی Cloudflare",
   "telemetry": "https://rs.shokricloud.shop/api"
 }
