@@ -28,7 +28,9 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { headers: cors() });
     const url = new URL(req.url);
     if (url.pathname === "/status") {
-      return json({ ok: true, server: "roozshomar-cloudflare", password_set: passwordOk(env), database: !!env.DB });
+      const st = { ok: true, server: "roozshomar-cloudflare", password_set: passwordOk(env), database: !!env.DB };
+      const wantsHtml = (req.headers.get("Accept") || "").includes("text/html") && url.searchParams.get("format") !== "json";
+      return wantsHtml ? statusPage(st) : json(st);
     }
     // به‌روزرسانی و نسخه‌ی وب: هر GET بدون کلید برنامه ← از GitHub Pages
     if (req.method === "GET" && url.pathname !== "/api" && !url.searchParams.has("k")) return proxy(url);
@@ -62,6 +64,43 @@ async function proxy(url) {
   if (isMeta) h.set("Cache-Control", "no-store");
   if (isApk) { h.set("Content-Type", "application/vnd.android.package-archive"); h.set("Content-Disposition", 'attachment; filename="RoozShomar.apk"'); }
   return new Response(r.body, { status: r.status, headers: h });
+}
+
+// صفحه‌ی خوانای وضعیت سرور برای مرورگر (آمار نصب‌ها اینجا نیست؛ فقط در پنل مدیریت)
+function statusPage(st) {
+  const row = (ok, yes, no) =>
+    `<li class="${ok ? "ok" : "bad"}"><span class="i">${ok ? "✓" : "✗"}</span>${ok ? yes : no}</li>`;
+  let when = "";
+  try {
+    const parts = {};
+    for (const x of new Intl.DateTimeFormat("fa-IR-u-ca-persian", { weekday: "long", day: "numeric", month: "long",
+      year: "numeric", hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: "Asia/Tehran" }).formatToParts(new Date()))
+      parts[x.type] = x.value;
+    when = `${parts.weekday} ${parts.day} ${parts.month} ${parts.year} — ساعت ${parts.hour}:${parts.minute}`;
+  } catch (e) { when = ""; }
+  const all = st.ok && st.password_set && st.database;
+  const html = `<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>وضعیت سرور روزشمار</title><style>
+@font-face{font-family:V;src:url(/Vazirmatn-FD-Regular.ttf)}@font-face{font-family:V;font-weight:700;src:url(/Vazirmatn-FD-Bold.ttf)}
+body{margin:0;background:#f4f6fa;color:#263238;font:16px/1.9 V,system-ui,sans-serif;display:flex;justify-content:center}
+main{width:min(460px,100% - 32px);margin:40px 0}h1{font-size:22px;color:#1565c0;margin:0 0 4px}
+.sub{color:#78909c;font-size:14px;margin:0 0 18px}.card{background:#fff;border:1px solid #dde3ea;border-radius:18px;padding:8px 18px}
+ul{list-style:none;margin:0;padding:0}li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #eef1f5}
+li:last-child{border-bottom:0}.i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;flex:none}
+.ok .i{background:#2e7d32}.bad .i{background:#c62828}.sum{margin:16px 0 0;font-weight:700;color:${all ? "#2e7d32" : "#c62828"}}
+.foot{color:#90a4ae;font-size:13px;margin-top:18px}</style></head><body><main>
+<h1>وضعیت سرور روزشمار شمسی</h1><p class="sub">${when}</p>
+<div class="card"><ul>
+${row(st.ok, "سرور روشن است و جواب می‌دهد", "سرور جواب نمی‌دهد")}
+${row(st.password_set, "رمز مدیریت تنظیم شده است", "رمز مدیریت تنظیم نشده (Secret با نام ADMIN_PASSWORD)")}
+${row(st.database, "پایگاه داده‌ی آمار وصل است", "پایگاه داده‌ی آمار وصل نیست")}
+</ul></div>
+<p class="sum">${all ? "همه‌چیز درست کار می‌کند." : "یک مورد نیاز به بررسی دارد."}</p>
+<p class="foot">آمار نصب‌ها فقط در پنل مدیریت برنامه نشان داده می‌شود.</p>
+</main></body></html>`;
+  return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff", "X-Robots-Tag": "noindex" } });
 }
 
 function cors() {
