@@ -36,11 +36,12 @@ function pillBtn(text, on, solid) { return h("button", { class: "pill" + (solid 
 const CAL_SVG = (c = "currentColor") => `<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="${c}" stroke-width="2"/><rect x="3" y="5" width="18" height="5" fill="${c}"/><rect x="7" y="2" width="2" height="5" fill="${c}"/><rect x="15" y="2" width="2" height="5" fill="${c}"/><g fill="${c}"><rect x="6" y="12.5" width="3" height="3"/><rect x="10.5" y="12.5" width="3" height="3"/><rect x="15" y="12.5" width="3" height="3"/><rect x="6" y="16.5" width="3" height="3"/><rect x="10.5" y="16.5" width="3" height="3"/></g></svg>`;
 
 // ---------- تقویم با انتخاب سریع سال و ماه ----------
-function pickDate(selJdn, onPick) {
+function pickDate(selJdn, onPick, title) {
   const today = J.todayJdn(), tj = d2j(today), sj = d2j(selJdn != null ? selJdn : today);
   let vy = sj[0], vm = sj[1], mode = "days", page = Math.floor((vy - 1) / 20) * 20 + 1;
   Sheet.push(function render(s) {
     s.innerHTML = "";
+    if (title) s.append(h("div", { class: "caltitle" }, title));
     const head = h("div", { class: "calhead" });
     const prev = h("button", { class: "arr", "aria-label": "قبلی", onclick: () => shift(-1) }, "›");
     const next = h("button", { class: "arr", "aria-label": "بعدی", onclick: () => shift(1) }, "‹");
@@ -107,6 +108,7 @@ function openTheme(onChange) {
 // ---------- راهنما و درباره ----------
 const HELP = [
   ["محاسبه‌ی تاریخ", "عدد را در «تعداد روز» بنویسید؛ عدد منفی یعنی روزهای گذشته. دکمه‌های + و − یک روز جلو و عقب می‌روند و با نگه داشتن، پشت سر هم. با زدن روی تاریخ، کپی می‌شود."],
+  ["شمارش از یک روز دیگر", "کنار «تعداد روز» دکمه‌ی «شروع از : امروز» و یک تقویم هست. با زدن روی آن، روزی را که شمارش باید از آن شروع شود از تقویم انتخاب کنید؛ مثلاً ۱۰ روز بعد. از آن به بعد عدد کادر از همان روز شمرده می‌شود: ۵ یعنی ۵ روز بعد از آن روز و ۵- یعنی ۵ روز قبل از آن. زیر نتیجه هم نوشته می‌شود که تاریخ حاصل چند روز با امروز فاصله دارد. با دکمه‌ی ✕ شروع شمارش دوباره «امروز» می‌شود."],
   ["واحد و روزهای کاری", "واحد را روی روز، هفته یا ماه بگذارید. «فقط روزهای کاری» جمعه‌ها و تعطیلات رسمی را نمی‌شمارد و «پنج‌شنبه هم تعطیل» پنج‌شنبه‌ها را هم کنار می‌گذارد."],
   ["تقویم", "با دکمه‌ی تقویم، روز دلخواه را انتخاب کنید. روی نام ماه یا سال بزنید تا فهرست ماه‌ها یا سال‌ها برای انتخاب سریع باز شود."],
   ["ابزارها", "اشتراک‌گذاری، یادآور (افزودن به تقویم آیفون)، سابقه‌ی ۳۰ محاسبه‌ی آخر، فاصله‌ی دو تاریخ و محاسبه‌ی سن."],

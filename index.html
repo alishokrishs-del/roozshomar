@@ -20,7 +20,10 @@
   <h1>محاسبه تاریخ بر اساس تعداد روز</h1>
   <div class="today" id="today"></div>
 
-  <div class="label">تعداد روز :</div>
+  <div class="labrow"><div class="label">تعداد روز :</div>
+    <button class="basex" id="baseClear" aria-label="شروع شمارش از امروز" hidden>✕</button>
+    <button class="basebtn" id="baseBtn" aria-label="روز شروع شمارش"></button>
+    <button class="calbtn small" id="baseCal" aria-label="انتخاب روز شروع شمارش از تقویم"></button></div>
   <div class="inrow">
     <button class="sq" id="plus" aria-label="یک روز بعد">+</button>
     <input id="days" inputmode="numeric" pattern="-?[0-9]*" autocomplete="off" placeholder="مثلاً 10" aria-label="تعداد روز">

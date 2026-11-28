@@ -5,7 +5,9 @@ const MAX_DAYS = 365000;
 const S = {
   unit: store.get("unit", UNIT_DAY), working: store.get("working", false), thursday: store.get("thursday", false),
   today: J.todayJdn(), cur: null, n: 0, rel: "", seq: 0, histTimer: 0,
+  base: 0,   // روز شروع شمارش: ۰ یعنی «امروز»؛ وگرنه شماره‌ی روز (JDN) انتخاب‌شده از تقویم
 };
+const baseJdn = () => S.base || S.today;
 const el = id => document.getElementById(id);
 
 function maxForUnit() {
@@ -35,10 +37,10 @@ function update() {
   if (v.empty) { el("result").textContent = ""; refreshActions(); return; }
   if (v.bad) { el("result").textContent = "عدد خارج از محدوده است"; el("result").classList.add("err"); refreshActions(); return; }
   const n = v.n, working = S.working && S.unit === UNIT_DAY;
-  const r = Engine.compute(S.today, n, S.unit, working, S.thursday, Events.holidayOf);
+  const r = Engine.compute(baseJdn(), n, S.unit, working, S.thursday, Events.holidayOf);
   if (r.missing) {
     // تعطیلات سال‌های لازم هنوز خوانده نشده: بخوان و دوباره حساب کن
-    const y0 = d2j(S.today)[0], y1 = d2j(r.jdn)[0] + (n > 0 ? 1 : 0), ys = [];
+    const y0 = d2j(baseJdn())[0], y1 = d2j(r.jdn)[0] + (n > 0 ? 1 : 0), ys = [];
     for (let y = Math.min(y0, y1); y <= Math.max(y0, y1) && ys.length < 30; y++) if (!Events.peek(y)) ys.push(y);
     if (ys.length && !update.tried[ys.join()]) {
       update.tried[ys.join()] = 1;
@@ -62,16 +64,38 @@ function update() {
 update.tried = {};
 
 function relativeLine(n, r, working) {
-  if (n === 0) return "امروز";
-  const dir = n > 0 ? " بعد از امروز" : " قبل از امروز", num = fa(Math.abs(n)), days = fa(Math.abs(r.calendarDays));
-  if (S.unit === UNIT_WEEK) return num + " هفته" + dir + " (" + days + " روز)";
-  if (S.unit === UNIT_MONTH) return num + " ماه" + dir + " (" + days + " روز)";
+  const fromToday = !S.base, from = fromToday ? "امروز" : fmtJ(d2j(S.base));
+  let tail = "";
+  if (!fromToday) {
+    const dt = r.jdn - S.today;
+    tail = "\n" + (dt === 0 ? "یعنی امروز" : "یعنی " + fa(Math.abs(dt)) + " روز " + (dt > 0 ? "بعد" : "قبل") + " از امروز");
+  }
+  if (n === 0) return fromToday ? "امروز" : "همان روز شروع شمارش (" + from + ")" + tail;
+  const dir = (n > 0 ? " بعد از " : " قبل از ") + from, num = fa(Math.abs(n)), days = fa(Math.abs(r.calendarDays));
+  if (S.unit === UNIT_WEEK) return num + " هفته" + dir + " (" + days + " روز)" + tail;
+  if (S.unit === UNIT_MONTH) return num + " ماه" + dir + " (" + days + " روز)" + tail;
   if (working) {
-    let t = num + " روز کاری" + dir + " (" + days + " روز تقویمی" + (S.thursday ? "، بدون پنج‌شنبه‌ها" : "") + ")";
+    let t = num + " روز کاری" + dir + " (" + days + " روز تقویمی" + (S.thursday ? "، بدون پنج‌شنبه‌ها" : "") + ")" + tail;
     if (r.missing) t += "\nتعطیلات رسمی این سال در دسترس نیست؛ فقط جمعه‌ها حساب شد";
     return t;
   }
-  return num + " روز" + dir;
+  return num + " روز" + dir + tail;
+}
+
+// ---------- روز شروع شمارش ----------
+function paintBase() {
+  const custom = !!S.base, b = custom ? d2j(S.base) : null;
+  el("baseBtn").textContent = "شروع از : " + (custom ? fa(b[2]) + " " + MONTHS[b[1] - 1] + (b[0] === d2j(S.today)[0] ? "" : " " + fa(b[0])) : "امروز");
+  el("baseBtn").classList.toggle("on", custom);
+  el("baseClear").hidden = !custom;
+}
+function setBase(jdn) {
+  S.base = (!jdn || jdn === S.today) ? 0 : jdn;
+  paintBase(); update();
+}
+function openBase() {
+  el("days").blur();
+  pickDate(S.base || null, j => setBase(j), "شمارش از چه روزی شروع شود؟");
 }
 
 function showEvents(seq, j) {
@@ -149,11 +173,11 @@ function queryText(o) {
 function addHistory() {
   if (S.cur === null) return;
   const w = S.working && S.unit === UNIT_DAY;
-  const e = { n: S.n, u: S.unit, w, th: w && S.thursday, r: fmtJ(d2j(S.cur)) + " — " + WD[J.weekColumn(S.cur)], t: fmtJ(d2j(S.today)) };
+  const e = { n: S.n, u: S.unit, w, th: w && S.thursday, r: fmtJ(d2j(S.cur)) + " — " + WD[J.weekColumn(S.cur)], t: fmtJ(d2j(S.today)), b: S.base };
   const out = [e];
   for (const o of store.get("history", [])) {
     if (out.length >= 30) break;
-    if (o.n === e.n && o.u === e.u && o.w === e.w && o.th === e.th) continue;
+    if (o.n === e.n && o.u === e.u && o.w === e.w && o.th === e.th && (o.b || 0) === e.b) continue;
     out.push(o);
   }
   store.set("history", out);
@@ -164,7 +188,7 @@ function openHistory() {
     const list = store.get("history", []);
     if (!list.length) s.append(h("div", { class: "muted", style: "font-size:15px;margin-top:8px" }, "هنوز محاسبه‌ای ثبت نشده است ."));
     list.forEach(o => s.append(h("div", { class: "hist", onclick: () => { Sheet.pop(); restore(o); } },
-      h("b", {}, queryText(o)), h("div", {}, o.r + "   (محاسبه در " + o.t + ")"))));
+      h("b", {}, queryText(o) + (o.b ? " از " + fmtJ(d2j(o.b)) : "")), h("div", {}, o.r + "   (محاسبه در " + o.t + ")"))));
     s.append(btnRow(pillBtn("پاک کردن سابقه", () => { store.set("history", []); Sheet.pop(); toast("سابقه پاک شد"); }), pillBtn("بستن", () => Sheet.pop())));
   });
 }
@@ -173,6 +197,8 @@ function restore(o) {
   S.working = !!o.w && S.unit === UNIT_DAY;
   if (S.working) S.thursday = !!o.th;
   store.set("unit", S.unit); store.set("working", S.working); store.set("thursday", S.thursday);
+  S.base = (o.b && o.b !== S.today) ? o.b : 0;
+  paintBase();
   el("days").value = String(o.n);
   paintOptions(); update();
 }
@@ -301,7 +327,12 @@ function paintToday() {
 document.addEventListener("DOMContentLoaded", () => {
   const c = applyThemeVars();
   el("calBtn").innerHTML = CAL_SVG();
+  el("baseCal").innerHTML = CAL_SVG();
   paintToday();
+  paintBase();
+  el("baseBtn").addEventListener("click", openBase);
+  el("baseCal").addEventListener("click", openBase);
+  el("baseClear").addEventListener("click", () => setBase(0));
   el("ver").textContent = "نسخه‌ی وب " + fa(APP_VERSION) + " — مخصوص آیفون و همه‌ی مرورگرها";
   el("credit").textContent = Credit.line();
   el("credit").addEventListener("click", openAbout);
@@ -324,7 +355,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pickDate(S.cur, j => {
       // انتخاب از تقویم = فاصله به روز تقویمی
       S.unit = UNIT_DAY; S.working = false; store.set("unit", UNIT_DAY); store.set("working", false);
-      el("days").value = String(j - S.today);
+      el("days").value = String(j - baseJdn());   // فاصله از روز شروع شمارش
       paintOptions(); update();
     });
   });
@@ -333,13 +364,13 @@ document.addEventListener("DOMContentLoaded", () => {
   el("histBtn").addEventListener("click", openHistory);
   el("diffBtn").addEventListener("click", openDiff);
   el("ageBtn").addEventListener("click", openAge);
-  el("themeBtn").addEventListener("click", () => openTheme(() => { el("calBtn").innerHTML = CAL_SVG(); }));
+  el("themeBtn").addEventListener("click", () => openTheme(() => { el("calBtn").innerHTML = CAL_SVG(); el("baseCal").innerHTML = CAL_SVG(); }));
   el("helpBtn").addEventListener("click", openHelp);
 
   paintOptions();
   update();
   Events.load(d2j(S.today)[0]).catch(() => {});
-  document.addEventListener("visibilitychange", () => { if (!document.hidden && J.todayJdn() !== S.today) { paintToday(); update(); } });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && J.todayJdn() !== S.today) { paintToday(); if (S.base === S.today) S.base = 0; paintBase(); update(); } });
   registerSW();
   installHint();
 });
