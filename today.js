@@ -1,5 +1,8 @@
 /* روزشمار شمسی — صفحه‌ی امروز (شیشه‌ای، به‌جای ویجت در آیفون) */
 "use strict";
+// داخل زبانه‌ی «امروز» برنامه (iframe): دکمه‌ی برگشت لازم نیست
+const EMBED = new URLSearchParams(location.search).has("embed") && window.parent !== window;
+if (EMBED) document.documentElement.classList.add("embed");
 
 const DEFAULT_ORDER = ["hero", "dates", "calendar", "events", "buttons"];
 const T = { today: J.todayJdn(), sel: 0, vy: 0, vm: 0, order: [], cards: {} };
@@ -37,7 +40,8 @@ function buildSections() {
   box.innerHTML = ""; order.forEach(k => box.append(T.cards[k]));
 
   const b = T.cards.buttons;
-  b.append(h("a", { href: "index.html" }, "باز کردن روزشمار"), h("button", { onclick: share }, "اشتراک‌گذاری"));
+  b.append(EMBED ? h("button", { onclick: () => parent.postMessage("rs-calc", "*") }, "محاسبه‌ی تاریخ")
+                 : h("a", { href: "index.html" }, "باز کردن روزشمار"), h("button", { onclick: share }, "اشتراک‌گذاری"));
   const cal = T.cards.calendar;
   cal.append(h("div", { class: "ch" },
     h("button", { "aria-label": "ماه قبل", onclick: () => shiftMonth(-1) }, "›"),

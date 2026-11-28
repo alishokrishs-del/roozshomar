@@ -117,9 +117,10 @@ function openBase() {
 // ---------- زبانه‌ها ----------
 function selectTab(t) {
   S.tab = t;
-  for (let i = 0; i < 4; i++) el("tab" + i).hidden = i !== t;
+  for (let i = 0; i < 5; i++) el("tab" + i).hidden = i !== t;
+  document.body.classList.toggle("on-today", t === 0);
   $$("#tabbar button").forEach(b => b.classList.toggle("on", +b.dataset.t === t));
-  if (t !== 0) el("days").blur();
+  if (t !== 1) el("days").blur();
   window.scrollTo(0, 0);
 }
 /** خلاصه‌ی مناسبت روز حاصل روی صفحه‌ی محاسبه و عدد کنار زبانه */
@@ -415,7 +416,9 @@ document.addEventListener("DOMContentLoaded", () => {
   el("remBtn").addEventListener("click", reminder);
   el("histBtn").addEventListener("click", openHistory);
   el("histTile").addEventListener("click", openHistory);
-  el("evPeek").addEventListener("click", () => selectTab(1));
+  el("evPeek").addEventListener("click", () => selectTab(2));
+  // دکمه‌ی «محاسبه‌ی تاریخ» داخل زبانه‌ی امروز
+  window.addEventListener("message", e => { if (e.data === "rs-calc") selectTab(1); });
   $$("#tabbar button").forEach(b => b.addEventListener("click", () => selectTab(+b.dataset.t)));
   selectTab(0);
   el("diffBtn").addEventListener("click", openDiff);

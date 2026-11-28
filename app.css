@@ -185,3 +185,8 @@ h1 { font-size: 18px; }
   .pill { height: 38px; }
   .check { margin-top: 0; }
 }
+
+/* زبانه‌ی «امروز» (زبانه‌ی اول): همان صفحه‌ی امروز، تمام‌صفحه بالای نوار زبانه‌ها */
+.tabToday { position: fixed; left: 0; right: 0; top: 0; bottom: calc(env(safe-area-inset-bottom) + 62px); z-index: 1; }
+.tabToday iframe { width: 100%; height: 100%; border: 0; display: block; background: #0E1626; }
+body.on-today { overflow: hidden; }
