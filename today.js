@@ -11,6 +11,7 @@ T.sel = T.today; [T.vy, T.vm] = d2j(T.today);
 // ---------- ظاهر: شفافیت، رنگ شیشه، پس‌زمینه ----------
 function applyLook() {
   const c = applyThemeVars(), body = document.body;
+  if (EMBED) { const meta = document.querySelector('meta[name="theme-color"]'); if (meta) meta.content = c.bg || "#F4F6FA"; return; }   // ظاهر ساده‌ی برنامه (today.css)
   const tr = store.get("tAlpha", 60), tone = store.get("tTone", "dark");
   body.classList.toggle("light", tone === "light");
   body.style.setProperty("--g-a", (0.85 - tr / 100 * 0.8).toFixed(3));

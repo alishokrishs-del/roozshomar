@@ -90,3 +90,15 @@
 
 /* داخل زبانه‌ی امروز برنامه */
 .embed #openApp { visibility: hidden; }
+/* داخل زبانه‌ی «امروز» برنامه: همان ظاهر زبانه‌ی محاسبه (رنگ‌های تم برنامه، کارت‌های ساده، بدون شیشه) */
+.embed .glass-page { background: var(--bg); color: var(--text); --g-text: var(--text); --g-sub: var(--muted);
+  --g-line: var(--fill-stroke); --g-hol: var(--holiday); --g-title: var(--accent-text); }
+.embed .wall { display: none; }
+.embed .gc { background: var(--fill); border: 1.5px solid var(--fill-stroke); border-radius: 16px; box-shadow: none; text-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none; }
+.embed .tbtn { background: var(--input); border: 1.5px solid var(--input-stroke); color: var(--accent-text); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.embed .tbar { justify-content: center; }
+.embed .tbar .ttl { text-shadow: none; color: var(--accent-text); font-size: 18px; }
+.embed .tbar .tbtn { display: none; }
+.embed .tcredit { text-shadow: none; }
+.embed .glass-page .sheet { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
