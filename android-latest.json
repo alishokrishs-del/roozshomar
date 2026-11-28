@@ -1,9 +1,9 @@
 {
-  "versionCode": 53,
-  "versionName": "4.7",
+  "versionCode": 54,
+  "versionName": "4.8",
   "apk": "RoozShomar.apk",
   "size": 851548,
-  "sha256": "d5ce272dc7755864617002cce5169d3a942bc776e80e0174e39737d0137c46d1",
+  "sha256": "3523e135dc77010d9585b96f7fc5259c425aea6c6abebdd4fb77b64a4bdf85a6",
   "notes": "• رفع بسته شدن برنامه هنگام ورود به پنل مدیریت\n• به‌روزرسانی و آمار از دامنه‌ی اختصاصی برنامه روی Cloudflare",
   "telemetry": "https://rs.shokricloud.shop/api"
 }
