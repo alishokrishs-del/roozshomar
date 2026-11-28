@@ -4,7 +4,7 @@
 # رمز مدیریت اینجا نیست: آن را در داشبورد به‌صورت Secret با نام ADMIN_PASSWORD بگذارید.
 name = "roozshomar"
 main = "cloudflare-worker/worker.js"
-compatibility_date = "2025-10-01"
+compatibility_date = "2025-10-01"   # ساخت: 2026-11-28
 workers_dev = true
 
 routes = [
